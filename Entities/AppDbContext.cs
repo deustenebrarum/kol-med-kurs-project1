@@ -10,13 +10,13 @@ public class AppDbContext : DbContext
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
+        Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // ServiceType configuration
         modelBuilder.Entity<ServiceType>()
-            .HasKey(st => st.ServiceTypeID);
+            .HasKey(st => st.Id);
 
         modelBuilder.Entity<ServiceType>()
             .Property(st => st.Name)
@@ -25,7 +25,7 @@ public class AppDbContext : DbContext
 
         // Specialist configuration
         modelBuilder.Entity<Specialist>()
-            .HasKey(sp => sp.SpecialistID);
+            .HasKey(sp => sp.Id);
 
         modelBuilder.Entity<Specialist>()
             .Property(sp => sp.FullName)
@@ -43,7 +43,7 @@ public class AppDbContext : DbContext
 
         // User configuration
         modelBuilder.Entity<User>()
-            .HasKey(u => u.UserID);
+            .HasKey(u => u.Id);
 
         modelBuilder.Entity<User>()
             .Property(u => u.Login)
@@ -65,7 +65,7 @@ public class AppDbContext : DbContext
 
         // Request configuration
         modelBuilder.Entity<Request>()
-            .HasKey(r => r.RequestID);
+            .HasKey(r => r.Id);
 
         modelBuilder.Entity<Request>()
             .Property(r => r.Number)
@@ -75,21 +75,21 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Request>()
             .HasOne(r => r.ServiceType)
             .WithMany(st => st.Requests)
-            .HasForeignKey(r => r.ServiceTypeID);
+            .HasForeignKey(r => r.Id);
 
         modelBuilder.Entity<Request>()
             .HasOne(r => r.Specialist)
             .WithMany(s => s.Requests)
-            .HasForeignKey(r => r.SpecialistID);
+            .HasForeignKey(r => r.Id);
 
         modelBuilder.Entity<Request>()
             .HasOne(r => r.Patient)
             .WithMany(u => u.Requests)
-            .HasForeignKey(r => r.PatientID);
+            .HasForeignKey(r => r.Id);
 
         // Review configuration
         modelBuilder.Entity<Review>()
-            .HasKey(rev => rev.ReviewID);
+            .HasKey(rev => rev.Id);
 
         modelBuilder.Entity<Review>()
             .Property(rev => rev.Title)
@@ -102,7 +102,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Review>()
             .HasOne(rev => rev.Specialist)
             .WithMany(s => s.Reviews)
-            .HasForeignKey(rev => rev.SpecialistID);
+            .HasForeignKey(rev => rev.Id);
 
         base.OnModelCreating(modelBuilder);
     }
